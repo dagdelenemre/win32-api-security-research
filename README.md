@@ -8,8 +8,11 @@ Geliştirilen modüller tamamen **eğitim ve Konsept Kanıtı** amaçlıdır. Te
 
 * **API HOOKING:** Fonksiyon çağrılarının bellekte nasıl yakalandığı/yönlendirildiği
 * **Process Injection:** Hedef process'lerin bellek alanına dışarıdan veri yazma/çalıştırma
+* **DLL Injection:** 'CreateRemoteThread' ve 'LoadLibraryA' kullanılarak hedef process'e dışarıdan DLL(kütüphane) yükleme
 * **Memory Manipulation:** Çalışan process'lerin bellek alanlarını okuma/değiştirme
-* **Encrypted Execution:** Bellek içi şifreleme/çözme işlemleriyle statik analizi zorlaştırma
+* **Encrypted Execution:** Bellek içi XOR şifreleme/çözme işlemleriyle statik analizi zorlaştırma
+* **System & Process Enum:** İşletim sistemi bilgilerini çekme ve mevcut process'leri listeleme (Görev yöneticisi gibi)
+* **Local Monitoring:** Temel seviye tuş yakalama (Keylogger)
 
 # Neden Bu Proje?
 
