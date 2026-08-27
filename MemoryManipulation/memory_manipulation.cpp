@@ -39,7 +39,7 @@ void CrossProcessMemory()
 
   // Bellekte açtığımız yere yazma işlemi yapıyoruz.
 
-  BOOL sonuc = WriteProcessMemory(hProcess, lpAddress, "Ben Emre Kadir", 15, NULL);
+  BOOL sonuc = WriteProcessMemory(hProcess, lpAddress, "Hacked by Attacker", 19, NULL);
 
   if(sonuc)
   {
