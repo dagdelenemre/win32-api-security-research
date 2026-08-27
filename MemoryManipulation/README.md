@@ -1,17 +1,21 @@
 # Memory Manipulation
 
-Bu modül, çalışan bir process'in bellek alanına dışarıdan nasıl müdahale edilebileceğini gösteren iki parçalı bir PoC(Konsept Kanıtıdır)
+Bu modül, çalışan bir process'in bellek alanına dışarıdan nasıl müdahale edilebileceğini gösteren iki parçalı bir PoC'dir. Hedef olarak yazılmış basit bir oyun (KurbanOyun.cpp) ve bu oyunun can değerini değiştiren araçtan oluşur.
 
-Çalışma, hedef olarak yazılmış basit bir C++ uygulaması (KurbanOyun.cpp) ve bu uygulamanın bellek adreslerini okuyup değiştiren asıl manipülasyon aracından oluşmaktadır.
+## Kullandığım API'ler
 
-## Kullanılan Win32 API'leri ve Mantığı
-Tool, işletim sistemi seviyesinde bellek sınırlarını aşmak için aşağıdaki API'leri kullanır:
+- **OpenProcess**: Hedef process'e PROCESS_ALL_ACCESS ile bağlanır.
+- **ReadProcessMemory**: Hedef process'teki belirli bir adresten veri okur.
+- **VirtualAllocEx**: Hedefin belleğinde yeni bir alan tahsis eder (CrossProcessMemory örneğinde).
+- **WriteProcessMemory**: Tahsis edilen veya okunan adrese yeni veri yazar.
 
-*  **`OpenProcess`**: Hedef process'in pid'sini kullanarak process'e 'PROCESS_ALL_ACCESS' ile tam yetkili erişim atar.
-*  **`ReadProcessMemory`**: Hedef process'deki spesifik bir adresteki veriyi okur. (can değeri)
-*  **`VirtualAllocEx`**: Hedef sürecin belleğinde belirtilen büyüklükte alan tahsis eder.
-*  **`WriteProcessMemory`**: Tahsis ettiğimiz alana veri yazarız ve programı manipüle etmiş oluruz. (Can değeri artık 9999)
+## İşlem Akışı
 
-## Perspektif
+1. **CrossProcessMemory**: Başka bir process'in belleğinde yer açıp oraya "Ben Emre Kadir" yazıyorum (sadece yazma örneği).
+2. **MemoryScanner**: KurbanOyun'un PID'sini ve can değerinin adresini kullanarak:
+   - `ReadProcessMemory` ile mevcut canı okuyorum.
+   - `WriteProcessMemory` ile canı 9999 yapıyorum.
 
-Yaptığımız işlem günümüz güvenlik yazılımları tarafından anında tespit edilecek kadar gürültülü olsa da ileri seviye saldırıların temelleri buradan geliyor.
+## Savunma Perspektifi
+
+`ReadProcessMemory` ve `WriteProcessMemory` çağrıları, AV/EDR sistemleri için klasik sinyallerdir. Özellikle `PROCESS_ALL_ACCESS` ile açılan bir process hemen şüphe uyandırır. Bu nedenle bu yöntem günümüzde çok gürültülüdür. Ama burada amaç, Windows bellek yönetimini ve process'ler arası veri alışverişini anlamak. Gerçek saldırılarda bu işlemler daha gizli API'lerle veya driver seviyesinde yapılır.
