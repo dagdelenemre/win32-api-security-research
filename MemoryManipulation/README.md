@@ -11,7 +11,7 @@ Bu modül, çalışan bir process'in bellek alanına dışarıdan nasıl müdaha
 
 ## İşlem Akışı
 
-1. **CrossProcessMemory**: Başka bir process'in belleğinde yer açıp oraya "Ben Emre Kadir" yazıyorum (sadece yazma örneği).
+1. **CrossProcessMemory**: Başka bir process'in belleğinde yer açıp oraya "Hacked by Attacker" yazıyorum (sadece yazma örneği).
 2. **MemoryScanner**: KurbanOyun'un PID'sini ve can değerinin adresini kullanarak:
    - `ReadProcessMemory` ile mevcut canı okuyorum.
    - `WriteProcessMemory` ile canı 9999 yapıyorum.
