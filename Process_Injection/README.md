@@ -1,17 +1,20 @@
 # Process Injection
 
-Bu modül, Windows'da bir shellcodu'un başka bir process'in içerisine enjekte edilmesini anlatır.
+Bu modül, bir shellcode'u başka bir process'in belleğine yazıp orada çalıştırmayı gösteren klasik bir örnektir.
 
-## Kullanılan Win32 API'leri ve İşlevleri
+## Kullandığım API'ler
 
-Bu çalışmada yararlanılan temel sistem fonksiyonları:
+- **VirtualAllocEx**: Hedef process'in belleğinde shellcode için yer açar.
+- **WriteProcessMemory**: Shellcode baytlarını hedef process'e yazar.
+- **CreateRemoteThread**: Hedef process'te yeni bir thread başlatarak shellcode'u çalıştırır.
 
-* **`VirtualAlloc/VirtualAllocEx`**: Bellekte shellcode'un sığacağı kadar yer tahsis edilir
-* **`memcpy/WriteProcessMemory`**: memcpy iile kopyalama işlemi WriteProcessMemory ile belleğe yazma işlemi yapılır.
-* **`CreateThread/CreateRemoteThread`**: Thread(iş parçacıkları) oluşturmaya yarar
+## İşlem Akışı
 
-## Perspektif
+1. **OpenProcess** ile hedef PID'ye bağlanıyorum.
+2. **VirtualAllocEx** ile hedefin belleğinde shellcode boyutunda alan ayırıyorum.
+3. **WriteProcessMemory** ile shellcode'u o alana yazıyorum.
+4. **CreateRemoteThread** ile hedef process içinde o adresi çalıştırıyorum.
 
-Bu çalışma, Windows'da process'ler arası bellek yönetimini ve kod yürütme akışını incelemek amacıyla hazırlanmıştır.
-Standart Win32 API'lerinin ardışık kullanımı yüksek bir davranışsal imza (behavioral heuristic) oluşturduğundan,
-güncel sistemlerde savunma mekanizmalarının ve telemetri loglarının nasıl çalıştığını anlamak için temel bir referanstır.
+## Savunma Perspektifi
+
+Bu yöntem çok iyi bilindiği için EDR'ler `CreateRemoteThread` çağrısını ve `PAGE_EXECUTE_READWRITE` ile ayrılmış bellek bölgelerini izler. Ayrıca shellcode'un calc.exe açması gibi basit davranışlar da hemen yakalanır. Bu örnek, process'ler arası kod çalıştırmanın temelini gösteriyor. İleride daha gizli teknikler (Process Hollowing, APC Injection, vb.) öğrenmek için iyi bir başlangıç.
