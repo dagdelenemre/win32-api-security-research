@@ -1,14 +1,22 @@
 # Encrypted Execution
 
-Bu modül, statik analizi zorlaştırmak (obfuscation) amacıyla şifrelenmiş bir shellcode'un runtime bellekte nasıl çözülüp çalıştırıldığını gösteren temel bir örnektir.
+Bu modül, statik analizi zorlaştırmak için şifrelenmiş bir shellcode'u runtime'da çözüp çalıştırmayı gösteren basit bir örnektir.
 
-## Mantık ve Kullanılan API'ler
+## Kullandığım Win32 API'leri
 
-*   **XOR Şifreleme:** Shellcode'lar antivirüse takılmamak için XOR ile şifrelenir. (Ör. 0x5A anahtarıyla)
-*   **`VirtualAlloc`:** Bellekte şifreli kodun BYTE değeri sığacak kadar, çalıştırılabilir (`PAGE_EXECUTE_READWRITE`) bir alan tahsis eder.
-*   **Bellek İçi Çözme (Decryption):** Şifreli baytlar bu alana kopyalanır ve C++ içindeki bir `for` döngüsüyle tekrar aynı XOR anahtarına sokularak orijinal makine koduna dönüştürülür.
-*   **`CreateThread`:** Çözülen temiz makine kodunu yeni bir thread üzerinden çalıştırır.
+- **VirtualAlloc**: Bellekte şifreli kodun sığacağı kadar çalıştırılabilir (`PAGE_EXECUTE_READWRITE`) alan tahsis eder.
+- **memcpy**: Şifreli baytları o alana kopyalar.
+- **XOR döngüsü**: Şifreli baytları aynı anahtarla tekrar XOR'layarak orijinal shellcode'u elde eder.
+- **CreateThread**: Çözülen shellcode'u yeni bir thread'de çalıştırır.
 
-# Perspektif
+## İşlem Akışı
 
-Saldırganların, antivirüslerin davranışlarına göre davrandığını ve nasıl davrandığını incelemiş oluyoruz. Bu örnek gelişmiş antivirüsleri bypass edebilecek bir örnek olmasa dahi temeller buradan geliyorlar.
+1. **XOR ile şifrelenmiş** calc.exe shellcode'u elimde hazır.
+2. **VirtualAlloc** ile RAM'de yer açıyorum.
+3. **memcpy** ile şifreli baytları oraya kopyalıyorum.
+4. **For döngüsü** ile her baytı XOR anahtarıyla çözüyorum.
+5. **CreateThread** ile çözülen kodu çalıştırıyorum.
+
+## Savunma Perspektifi
+
+Bu yöntem basit imza tabanlı antivirüsleri atlatabilir ama gelişmiş EDR'ler şifrelenmiş olsa bile runtime'da bellek taraması yaparak shellcode'u tespit eder. Ayrıca XOR gibi basit şifreleme, statik analizde hemen fark edilir. Gerçek saldırılarda daha güçlü şifreleme (AES) ve polimorfik kod kullanılır. Ama bu örnek, bellekte kod çözme mantığını öğrenmek için iyi bir başlangıç.
