@@ -17,7 +17,7 @@ int main()
 
 void DllInjector()
 {
-	const char* dllPath = "C:\\Users\\kadir\\source\\repos\\benim_dll\\x64\\Debug\\benim_dll.dll";
+	const char* dllPath = "C:\\temp\\mydll.dll";
 	SIZE_T pathSize = strlen(dllPath) + 1; //yolun boyutu (+1 null karakteri için)
 
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, 384);
