@@ -1,0 +1,22 @@
+// dllmain.cpp : DLL uygulamasının giriş noktasını tanımlar.
+#include "pch.h"
+
+BOOL APIENTRY DllMain( HMODULE hModule,
+                       DWORD  ul_reason_for_call,
+                       LPVOID lpReserved
+                     )
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        // DLL hedefin icine yuklendigi an bu blok calisir.
+        // Biz basitce kurbanin icinden bir uyari mesaji cikartacagiz.
+        MessageBoxA(NULL, "Sisteme Sizildi! Emre Kadir tarafindan hacklendiniz.", "Zehirli Ok", MB_OK | MB_ICONWARNING);
+        break;
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
