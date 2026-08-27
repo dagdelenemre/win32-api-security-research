@@ -48,7 +48,7 @@ void ProcessManager()
 
   // İlk Process'i okuyup sonrakileri de while döngüsünde okuyorum
   Process32First(hSnapshot, &pe32);
-  while(Process32Next(hSnapshot, &pe32)
+  while(Process32Next(hSnapshot, &pe32))
   {
    wcout << "Process ID: " << pe32.th32ProcessID << endl;
    wcout << pe32.szExeFile << endl << endl; 
