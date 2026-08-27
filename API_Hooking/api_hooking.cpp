@@ -4,6 +4,9 @@
 
 using namespace std;
 
+// Orijinal fonksiyonun adresini saklamak için
+OriginalMessageBoxA oMessageBoxA = NULL;
+
 typedef int(WINAPI* OriginalMessageBoxA)(HWND, LPCSTR, LPCSTR, UINT); //WINAPI = __stdcall yani fonksiyonu çağırma sırası, dizilme ve temizlenme
 
 int WINAPI HookedMessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType)
